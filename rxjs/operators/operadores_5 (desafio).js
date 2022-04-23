@@ -1,31 +1,29 @@
 const {of, Observable} = require('rxjs')
 const {next} = require("lodash/seq");
+const {subscribeOn} = require("rxjs/operators");
 
 function terminadoCom(finalText) {
     return function (source) {
-        return Observable.create(subscriber => {
+        return Observable.create(resolver => {
             source.subscribe({
                 next(value) {
-                    if(Array.isArray(value)) {
-                        subscriber.next(
-                            value.filter(el => el.endsWith(finalText))
-                        )
-                    } else if(value.endsWith(finalText)) {
-                        subscriber.next(value)
+                    if (Array.isArray(value)) {
+                        resolver.next(value.filter(el => el.endsWith(finalText)))
+                    } else if (value.endsWith(finalText)) {
+                        resolver.next(value)
                     }
                 },
-                error(err) {
-                    subscriber.error(err)
+                error(value) {
+                    resolver.next(value)
                 },
                 complete() {
-                    subscriber.complete()
+                    resolver.complete()
                 }
             })
         })
     }
 }
 
-
-of(['Ana Silva', 'Maria Silva', 'Pedro Rocha'])
-    .pipe(terminadoCom('va'))
+of(['Joana Darque', 'Marina Katcheski', 'Miguel Mileski', 'Joel Schecheleski'])
+    .pipe(terminadoCom('ski'))
     .subscribe(console.log)

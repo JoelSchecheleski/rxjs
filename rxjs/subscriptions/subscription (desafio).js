@@ -12,11 +12,11 @@ const sub2 = obs.subscribe(num => {
     console.log(`#2 Gerou o número ${num}`)
 })
 
-const sub = new Subscription()
+const sub = new Subscription() // Adiciona uma subscription em outra
 sub.add(sub1)
 sub.add(sub2)
 
 // Depois de 5000 unsubscribe
 setTimeout(() => {
-    sub.unsubscribe()
+    sub.unsubscribe() // "Mata" todas as subscriptions
 }, 5000)
